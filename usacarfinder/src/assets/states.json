@@ -1,0 +1,34 @@
+{
+    "states": [
+        {
+            "id": "AL",
+            "name": "Alabama",
+            "price": 700
+        },
+        {
+            "id": "AZ",
+            "name": "Arizona",
+            "price": 890
+        },
+        {
+            "id": "AR",
+            "name": "Arkansas",
+            "price": 850
+        },
+        {
+            "id": "CA",
+            "name": "California",
+            "price": 950
+        }
+    ],
+    "destinations": [
+        {
+            "name": "Warszawa",
+            "price": 980
+        },
+        {
+            "name":"Wrocław",
+            "price": 950
+        }
+    ]
+}

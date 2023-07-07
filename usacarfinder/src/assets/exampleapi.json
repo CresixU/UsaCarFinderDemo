@@ -1,0 +1,110 @@
+{
+    "result": [
+        {
+            "id": 10009192,
+            "auction_name": "COPART CANADA",
+            "body_style": null,
+            "car_keys": "YES",
+            "color": "SILVER",
+            "cylinders": "6",
+            "doc_type": "QC - IRRECUPERABLE",
+            "drive": "All wheel drive",
+            "engine_type": "3.0L  6",
+            "est_retail_value": 76000,
+            "fuel": "GAS",
+            "highlights": "ENGINE START PROGRAM",
+            "location": "QC - MONTREAL",
+            "lot_number": 68586481,
+            "make": "BMW",
+            "model": "X3",
+            "odometer": null,
+            "primary_damage": "WATER/FLOOD",
+            "secondary_damage": null,
+            "seller": null,
+            "series": "XDRIVEM",
+            "transmission": "AUTOMATIC",
+            "vehicle_type": "AUTOMOBILE",
+            "vin": "5UXTS3C56J0Y98331",
+            "year": 2018,
+            "car_photo": {
+                "id": 8353197,
+                "all_lots_id": 10009192,
+                "photo": [
+                    "https://1830262577.rsc.cdn77.org/files/5UXTS3C56J0Y98331/COPART CANADA/68586481/photo/f354feac-ca7a-4880-8771-a4ffc8349b0a.JPG",
+                    "https://1830262577.rsc.cdn77.org/files/5UXTS3C56J0Y98331/COPART CANADA/68586481/photo/c80d5e47-4af1-4034-98fa-73b35fe027fb.JPG",
+                    "https://1830262577.rsc.cdn77.org/files/5UXTS3C56J0Y98331/COPART CANADA/68586481/photo/17c5d744-fd9a-4daf-bd66-3223db1d2e34.JPG",
+                    "https://1830262577.rsc.cdn77.org/files/5UXTS3C56J0Y98331/COPART CANADA/68586481/photo/be27f49b-41d4-4fcd-8b82-800cced16ee1.JPG",
+                    "https://1830262577.rsc.cdn77.org/files/5UXTS3C56J0Y98331/COPART CANADA/68586481/photo/3f4ec602-aee5-4cc1-a038-d99d9aadbd29.JPG",
+                    "https://1830262577.rsc.cdn77.org/files/5UXTS3C56J0Y98331/COPART CANADA/68586481/photo/288723a2-3564-4f2b-bd6a-c35029bb997e.JPG",
+                    "https://1830262577.rsc.cdn77.org/files/5UXTS3C56J0Y98331/COPART CANADA/68586481/photo/63d8e533-fc85-4f1c-a21f-d18e95e15769.JPG",
+                    "https://1830262577.rsc.cdn77.org/files/5UXTS3C56J0Y98331/COPART CANADA/68586481/photo/b34c5642-1962-40a9-92c1-ddda7f3d8119.JPG",
+                    "https://1830262577.rsc.cdn77.org/files/5UXTS3C56J0Y98331/COPART CANADA/68586481/photo/839964ad-e6cf-49bf-ac33-c5ff6301f74f.JPG",
+                    "https://1830262577.rsc.cdn77.org/files/5UXTS3C56J0Y98331/COPART CANADA/68586481/photo/8727cd10-bf4c-4435-a3b4-8f265d33e4f8.JPG"
+                ]
+            },
+            "sales_history": [
+                {
+                    "id": 16985169,
+                    "all_lots_id": 10009192,
+                    "lot_number": 68586481,
+                    "purchase_price": 13200,
+                    "sale_status": "Sold",
+                    "sold": 1,
+                    "buyer_country": "CAN",
+                    "buyer_state": "QC",
+                    "buyer_id": 878717,
+                    "sale_date": 20220405,
+                    "saleUtcDateTime": "1649167200000",
+                    "sale_type": 1,
+                    "data_source": 31,
+                    "sale_name": null,
+                    "auction": 31,
+                    "check_status": 1
+                }
+            ],
+            "active_bidding": [
+                {
+                    "id": 611413442,
+                    "auction": 31,
+                    "all_lots_id": 10009192,
+                    "sale_date": null,
+                    "saleUtcDateTime": null,
+                    "current_bid": 175,
+                    "date_updated": 0,
+                    "bid_updated": 0,
+                    "for_delete": 1
+                }
+            ]
+        },
+        {
+            "id": 10776842,
+            "auction_name": "COPART",
+            "body_style": null,
+            "car_keys": "YES",
+            "color": "SILVER",
+            "cylinders": "6",
+            "doc_type": "QC - IRRECUPERABLE",
+            "drive": "All wheel drive",
+            "engine_type": "3.0L  6",
+            "est_retail_value": 76000,
+            "fuel": "GAS",
+            "highlights": "ENGINE START PROGRAM",
+            "location": "QC - MONTREAL",
+            "lot_number": 68586481,
+            "make": "BMW",
+            "model": "X3",
+            "odometer": null,
+            "primary_damage": "WATER/FLOOD",
+            "secondary_damage": null,
+            "seller": null,
+            "series": "XDRIVEM",
+            "transmission": "AUTOMATIC",
+            "vehicle_type": "AUTOMOBILE",
+            "vin": "5UXTS3C56J0Y98331",
+            "year": 2018,
+            "car_photo": null,
+            "sales_history": [],
+            "active_bidding": []
+        }
+    ]
+}
