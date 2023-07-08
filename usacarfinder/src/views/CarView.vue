@@ -56,13 +56,29 @@
 			rounded
 			class="pa-5">
 				<h2 class="mb-5">Kalkulator kosztów</h2>
-				<v-form>
+				<v-form @input="calculatePrice()">
 					<v-row>
 						<v-col cols="6">
 							<v-text-field
 							label="Cena samochodu $"
 							v-model="carPrice">
 							</v-text-field>
+							<v-select
+							label="Stan w USA"
+							clearable
+							v-model="usaState"
+							:items="states"
+							:item-title="combinedTitleStates"
+							item-value="price"
+							></v-select>
+							<v-select
+							label="Transport"
+							clearable
+							v-model="transport"
+							:items="destinations"
+							:item-title="combinedTitleDestination"
+							item-value="price"
+							></v-select>
 							<div>
 								<p>Pojazd rekreacyjny podlegający cłom odwetowym</p>
 								<v-switch v-model="extraTariff" :label="extraTariff ? 'Tak' : 'Nie'"></v-switch>
@@ -79,37 +95,22 @@
 							</div>
 						</v-col>
 						<v-col cols="6">
-							<v-select
-							label="Stan w USA"
-							clearable
-							v-model="usaState"
-							:items="states"
-							item-title="name"
-							item-value="price"
-							></v-select>
-							<v-select
-							label="Transport"
-							clearable
-							v-model="transport"
-							:items="destinations"
-							item-title="name"
-							item-value="price"
-							></v-select>
-							<v-table>
-								<tr><td>Eksportowa opłata spedycyjna</td><td> 150$</td></tr>
-								<tr><td>Opłata aukcyjna</td><td>540$</td></tr>
-								<tr v-if="!carOver30"><td>Cło {{ extraTariff ? '35%' : '10%' }}</td><td></td></tr>
-								<tr><td>Podatek {{ carOver30 ? '9%' : '21%' }}</td><td></td></tr>
-								<tr><td>Opłata spedycyjna (rozładunek auta, formalności celne)</td><td>490$</td></tr>
-								<tr v-if="!carOver30"><td>Akcyza w zależności od pojemności silnika {{ engineOver2l ? '18.6' : '3.1' }}%</td><td></td></tr>
+							<v-table class="calculator">
+								<tbody>
+									<tr><td>Eksportowa opłata spedycyjna</td><td> 150$</td></tr>
+									<tr><td>Opłata aukcyjna</td><td>540$</td></tr>
+									<tr v-if="!carOver30"><td>Cło {{ extraTariff ? '35%' : '10%' }}</td><td>{{ obliczClo()*carPrice }}$</td></tr>
+									<tr><td>Podatek {{ carOver30 ? '9%' : '21%' }}</td><td>{{ obliczPodatek()*carPrice }}$</td></tr>
+									<tr><td>Opłata spedycyjna (rozładunek auta, formalności celne)</td><td>490$</td></tr>
+									<tr v-if="!carOver30"><td>Akcyza w zależności od pojemności silnika {{ engineOver2l ? '18.6' : '3.1' }}%</td><td>{{ obliczAkcyza()*carPrice }}$</td></tr>
+									<tr><td>Cena w zależności od stanu USA</td><td>{{ usaState }}$</td></tr>
+									<tr><td>Transport</td><td>{{ transport }}$</td></tr>
+								</tbody>
 							</v-table>
 						</v-col>
 						<v-divider></v-divider>
-						<v-col cols="6">
-							Suma: {{ currentPrice }}$
-						</v-col>
-						<v-col cols="6">
-							<v-btn @click="calculatePrice()">Podlicz</v-btn>
+						<v-col cols="12">
+							<div style="text-align: right" class="px-5">Suma: {{ currentPrice }}$</div>
 						</v-col>
 					</v-row>
 				</v-form>
@@ -135,8 +136,8 @@ export default {
 			extraTariff: false,
 			carOver30: false,
 			engineOver2l: false,
-			usaState: '',
-			transport: '',
+			usaState: '0',
+			transport: '0',
 			states: localizations.states,
 			destinations: localizations.destinations,
 			currentPrice: 0
@@ -156,26 +157,77 @@ export default {
             this.data = await response.json()
         },
 		calculatePrice() {
-			let clo = 0.1
-			let akcyza = 0.031
-			let podatek = 0.21
+			let clo = this.obliczClo()
+			let akcyza = this.obliczAkcyza()
+			let podatek = this.obliczPodatek()
 			let oplataSpedycyjna = 490
 			let eksportowaOplataSpedycyjna = 150
 			let opalataAukcyjna = 540
-			if(this.extraTariff) clo = 0.35 
-			if(this.carOver2l) akcyza = 0.186
-			if(this.carOver30) {
-				clo = 0
-				akcyza = 0
-			}
+			
 			this.currentPrice = parseFloat(this.carPrice) + parseFloat(this.carPrice*clo) + parseFloat(this.carPrice * akcyza) + parseFloat(this.carPrice * podatek) + parseFloat(oplataSpedycyjna) + parseFloat(eksportowaOplataSpedycyjna) + parseFloat(opalataAukcyjna) + parseFloat(this.usaState) + parseFloat(this.transport)
-		}
+		},
+		obliczClo() {
+			let clo = 0.1
+			if(this.extraTariff) clo = 0.35 
+			if(this.carOver30) clo = 0
+			return clo
+		},
+		obliczAkcyza() {	
+			let akcyza = 0.031	
+			if(this.engineOver2l) akcyza = 0.186
+			if(this.carOver30) akcyza = 0
+			return akcyza
+		},
+		obliczPodatek() {
+			let podatek = 0.09
+			if(!this.carOver30) podatek = 0.21
+			return podatek
+		},
+		combinedTitleStates(value) {
+			if (value.name == undefined) return '';
+			return `${value.id} - ${value.name}: ${value.price}$`;
+		},
+		combinedTitleDestination(value) {
+			if (value.name == undefined) return '';
+			return `${value.name}: ${value.price}$`;
+		},
 	},
 	created() {
 		this.vin = this.$route.query.vin
 		this.data = jsonFile
 		this.car = this.data.result[0]
 		this.lastSale = this.car.sales_history[this.car.sales_history.length-1]
+		this.carPrice = this.car.est_retail_value
+	},
+	watch: {
+		carPrice() {
+			this.calculatePrice()
+		},
+		extraTariff()  {
+			this.calculatePrice()
+		},
+		carOver30()  {
+			this.calculatePrice()
+		},
+		engineOver2l()  {
+			this.calculatePrice()
+		},
+		usaState()  {
+			this.calculatePrice()
+		},
+		transport()  {
+			this.calculatePrice()
+		}
+	},
+	computed: {
+		calculatedAkcyza(value) {
+			return (value) => this.carPrice * this.obliczAkcyza()
+		}
 	}
 }
 </script>
+<style scoped>
+.calculator tr td:nth-child(2) {
+	text-align: right;
+}
+</style>
