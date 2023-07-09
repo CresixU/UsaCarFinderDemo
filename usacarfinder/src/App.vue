@@ -1,9 +1,13 @@
 <template>
 <v-app>
-	<v-app-bar :elevation="3" style="position: static">
-		Navigacja
+	<v-app-bar :elevation="3">
+		<v-container>
+			<RouterLink to="/" style="font-size: 22px">
+				<p><v-icon style="margin-top: -6px" icon="mdi-home"/> Strona główna</p>
+			</RouterLink>
+		</v-container>
 	</v-app-bar>
-	<v-container class="mx-auto mt-0 mt-sm-5">
+	<v-container class="mx-auto" style="margin-top: 100px">
 		<RouterView v-slot="{ Component }">
             <Transition name="animation">
                 <component :is="Component" />
@@ -20,5 +24,10 @@
 .animation-enter-from, .animation-leave-to {
 	opacity: 0;
 }
-
+a {
+	text-decoration: none;
+}
+a:visited {
+	color: black;
+}
 </style>

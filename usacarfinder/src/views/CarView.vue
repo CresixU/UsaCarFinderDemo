@@ -1,49 +1,77 @@
 <template>
 <div>
 	<v-row>
-		<v-col cols="8">
-			<v-carousel theme="dark">
-				<v-carousel-item
-				v-for="(image,i) in car.car_photo.photo"
-				:key="i"
-				:src="image"
-				>
-				</v-carousel-item>
-			</v-carousel>
+		<v-col cols="12">
+			<h2><v-skeleton-loader :loading="loading" type="text" class="d-block">{{car.auction_name}}</v-skeleton-loader></h2>
+			<p v-if="car.seller">Sprzedawca: <v-skeleton-loader :loading="loading" type="text" class="d-block">{{ car.seller }}</v-skeleton-loader></p>
 		</v-col>
-		<v-col cols="4">
-			<p>Status aukcji: {{ lastSale.sale_status }}</p>
-			<p>Cena zakupu: {{ lastSale.purchase_price }}</p>
-			<p>Data: {{ (new Date(this.lastSale.saleUtcDateTime).toString()) }}</p>
+		<v-col cols="12" lg="8">
+			<v-skeleton-loader :loading="loading" type="image" class="d-block">
+				<v-carousel>
+					<v-carousel-item
+					v-for="(image,i) in car.car_photo.photo"
+					:key="i"
+					:src="image"
+					>
+					</v-carousel-item>
+				</v-carousel>
+			</v-skeleton-loader>
+		</v-col>
+		<v-col cols="12" lg="4">
+			<v-skeleton-loader :loading="loading" type="card" class="d-block">
+				<v-expansion-panels>
+					<v-expansion-panel title="Historia sprzedaży" >
+						<template v-slot:text>
+							<h4 v-if="!car.sales_history">Brak historii</h4>
+							<div v-for="(item,i) in car.sales_history" :key="i">
+								<p>Status aukcji: {{ item.sale_status }}</p>
+								<p>Cena zakupu: {{ item.purchase_price }}$</p>
+								<p>Data: {{ getFormattedDate(new Date(parseInt(item.saleUtcDateTime))) }}</p>
+								<p>Kraj: {{ item.buyer_country }}, Stan: {{ item.buyer_state }}</p>
+								<v-divider class="my-2"></v-divider>
+							</div>
+						</template>
+					</v-expansion-panel>
+					<v-expansion-panel title="Aktywna licytacja" >
+						<template v-slot:text>
+							<h4 v-if="!car.active_bidding">Aktualnie nie odbywa się licytacja</h4>
+							<div v-for="(item,i) in car.active_bidding" :key="i">
+								<p>Data: {{ item.saleUtcDateTime ? getFormattedDate(new Date(parseInt(item.saleUtcDateTime))) : 'Brak' }}</p>
+								<p>Aktualna stawka: {{ item.current_bid }}$</p>
+								<v-divider class="my-2"></v-divider>
+							</div>
+						</template>
+					</v-expansion-panel>
+				</v-expansion-panels>
+			</v-skeleton-loader>
 		</v-col>
 		<v-divider></v-divider>
 		<v-col cols="12">
 			<v-table>
 				<tbody>
-					<tr><td>Nazwa aukcji</td><td>{{car.auction_name}}</td></tr>
-					<tr><td>Kluczyki</td> <td>{{ car.car_keys }}</td></tr>
-					<tr><td>Kolor</td> <td> {{ car.color }}</td></tr>
-					<tr><td>Typ nadwozia</td> <td> {{ car.body_style }} </td> </tr>
-					<tr><td>Ilość cylindrów</td> <td>{{car.cylinders}}</td></tr>
-					<tr><td>doc_type</td> <td>{{ car.doc_type }}</td></tr>
-					<tr><td>Napęd</td> <td>{{ car.drive }}</td></tr>
-					<tr><td>Silnik</td> <td>{{ car.engine_type }}</td></tr>
-					<tr><td>szacowana wartość detaliczna</td> <td>{{ car.est_retail_value }}</td></tr>
-					<tr><td>Paliwo</td> <td>{{car.fuel}}</td></tr>
-					<tr><td>highlights</td> <td>{{ car.highlights }}</td></tr>
-					<tr><td>Lokalizacja</td> <td>{{ car.location }}</td></tr>
-					<tr><td>lot_number</td> <td>{{car.lot_number}}</td></tr>
-					<tr><td>Marka</td> <td>{{ car.make }}</td></tr>
-					<tr><td>Model</td> <td>{{ car.model }}</td></tr>
-					<tr><td>Przebieg</td> <td>{{car.odometer}}</td></tr>
-					<tr><td>Uszkodzenie główne</td> <td>{{car.primary_damage}}</td></tr>
-					<tr><td>Uszkodzenia drugorzędne</td> <td>{{car.secondary_damage}}</td></tr>
-					<tr><td>Sprzedawca</td> <td>{{ car.seller}}</td></tr>
-					<tr><td>Seria</td> <td>{{car.series}}</td></tr>
-					<tr><td>transmission</td> <td>{{ car.transmission }}</td></tr>
-					<tr><td>Typ pojazdu</td> <td>{{ car.vehicle_type }}</td></tr>
-					<tr><td>VIN</td> <td>{{ car.vin }}</td></tr>
-					<tr><td>Rok</td> <td>{{ car.year }}</td></tr>
+					<tr><td>VIN</td> <td><v-skeleton-loader :loading="loading" type="text" class="d-block">{{ car.vin }}</v-skeleton-loader></td></tr>
+					<tr><td>Szacowana wartość detaliczna</td> <td><v-skeleton-loader :loading="loading" type="text" class="d-block">{{ car.est_retail_value }}$</v-skeleton-loader></td></tr>
+					<tr><td>Marka</td> <td><v-skeleton-loader :loading="loading" type="text" class="d-block">{{ car.make }}</v-skeleton-loader></td></tr>
+					<tr><td>Model</td> <td><v-skeleton-loader :loading="loading" type="text" class="d-block">{{ car.model }}</v-skeleton-loader></td></tr>
+					<tr><td>Rok</td> <td><v-skeleton-loader :loading="loading" type="text" class="d-block">{{ car.year }}</v-skeleton-loader></td></tr>
+					<tr><td>Ilość cylindrów</td> <td><v-skeleton-loader :loading="loading" type="text" class="d-block">{{car.cylinders}}</v-skeleton-loader></td></tr>
+					<tr><td>Napęd</td> <td><v-skeleton-loader :loading="loading" type="text" class="d-block">{{car.drive}}</v-skeleton-loader></td></tr>
+					<tr><td>Silnik</td> <td><v-skeleton-loader :loading="loading" type="text" class="d-block">{{car.engine_type}}</v-skeleton-loader></td></tr>
+					<tr><td>Kluczyki</td> <td><v-skeleton-loader :loading="loading" type="text" class="d-block">{{car.car_keys}}</v-skeleton-loader></td></tr>
+					<tr><td>Kolor</td> <td> <v-skeleton-loader :loading="loading" type="text" class="d-block">{{car.color}}</v-skeleton-loader></td></tr>
+					<tr><td>Typ nadwozia</td> <td> <v-skeleton-loader :loading="loading" type="text" class="d-block">{{car.body_style}}</v-skeleton-loader> </td> </tr>
+					<tr><td>Przebieg</td> <td><v-skeleton-loader :loading="loading" type="text" class="d-block">{{ car.odometer }}</v-skeleton-loader></td></tr>
+					<tr><td>doc_type</td> <td><v-skeleton-loader :loading="loading" type="text" class="d-block">{{car.doc_type}}</v-skeleton-loader></td></tr>
+					<tr><td>Uszkodzenie główne</td> <td><v-skeleton-loader :loading="loading" type="text" class="d-block">{{ car.primary_damage }}</v-skeleton-loader></td></tr>
+					<tr><td>Uszkodzenia drugorzędne</td> <td><v-skeleton-loader :loading="loading" type="text" class="d-block">{{ car.secondary_damage }}</v-skeleton-loader></td></tr>
+					<tr><td>Paliwo</td> <td><v-skeleton-loader :loading="loading" type="text" class="d-block">{{ car.fuel }}</v-skeleton-loader></td></tr>
+					<tr><td>highlights</td> <td><v-skeleton-loader :loading="loading" type="text" class="d-block">{{ car.highlights }}</v-skeleton-loader></td></tr>
+					<tr><td>Lokalizacja</td> <td><v-skeleton-loader :loading="loading" type="text" class="d-block">{{ car.location }}</v-skeleton-loader></td></tr>
+					<tr><td>lot_number</td> <td><v-skeleton-loader :loading="loading" type="text" class="d-block">{{ car.lot_number }}</v-skeleton-loader></td></tr>
+					<tr><td>Seria</td> <td><v-skeleton-loader :loading="loading" type="text" class="d-block">{{ car.series }}</v-skeleton-loader></td></tr>
+					<tr><td>transmission</td> <td><v-skeleton-loader :loading="loading" type="text" class="d-block">{{ car.transmission }}</v-skeleton-loader></td></tr>
+					<tr><td>Typ pojazdu</td> <td><v-skeleton-loader :loading="loading" type="text" class="d-block">{{ car.vehicle_type }}</v-skeleton-loader></td></tr>
+					
 				</tbody>
 			</v-table>
 		</v-col>
@@ -58,7 +86,7 @@
 				<h2 class="mb-5">Kalkulator kosztów</h2>
 				<v-form @input="calculatePrice()">
 					<v-row>
-						<v-col cols="6">
+						<v-col cols="12" lg="6">
 							<v-text-field
 							label="Cena samochodu $"
 							v-model="carPrice">
@@ -94,23 +122,27 @@
 								</div>
 							</div>
 						</v-col>
-						<v-col cols="6">
-							<v-table class="calculator">
-								<tbody>
-									<tr><td>Eksportowa opłata spedycyjna</td><td> 150$</td></tr>
-									<tr><td>Opłata aukcyjna</td><td>540$</td></tr>
-									<tr v-if="!carOver30"><td>Cło {{ extraTariff ? '35%' : '10%' }}</td><td>{{ obliczClo()*carPrice }}$</td></tr>
-									<tr><td>Podatek {{ carOver30 ? '9%' : '21%' }}</td><td>{{ obliczPodatek()*carPrice }}$</td></tr>
-									<tr><td>Opłata spedycyjna (rozładunek auta, formalności celne)</td><td>490$</td></tr>
-									<tr v-if="!carOver30"><td>Akcyza w zależności od pojemności silnika {{ engineOver2l ? '18.6' : '3.1' }}%</td><td>{{ obliczAkcyza()*carPrice }}$</td></tr>
-									<tr><td>Cena w zależności od stanu USA</td><td>{{ usaState }}$</td></tr>
-									<tr><td>Transport</td><td>{{ transport }}$</td></tr>
-								</tbody>
-							</v-table>
+						<v-col cols="12" lg="6">
+							<v-skeleton-loader :loading="loading" type="paragraph@5" class="d-block">
+								<v-table class="calculator">
+									<tbody>
+										<tr><td>Eksportowa opłata spedycyjna</td><td> 150$</td></tr>
+										<tr><td>Opłata aukcyjna</td><td>540$</td></tr>
+										<tr v-if="!carOver30"><td>Cło {{ extraTariff ? '35%' : '10%' }}</td><td>{{ obliczClo()*carPrice }}$</td></tr>
+										<tr><td>Podatek {{ carOver30 ? '9%' : '21%' }}</td><td>{{ obliczPodatek()*carPrice }}$</td></tr>
+										<tr><td>Opłata spedycyjna (rozładunek auta, formalności celne)</td><td>490$</td></tr>
+										<tr v-if="!carOver30"><td>Akcyza w zależności od pojemności silnika {{ engineOver2l ? '18.6' : '3.1' }}%</td><td>{{ obliczAkcyza()*carPrice }}$</td></tr>
+										<tr><td>Cena w zależności od stanu USA</td><td>{{ usaState ? `${usaState}$` : 'Nie wybrano'}}</td></tr>
+										<tr><td>Transport</td><td>{{ transport ? `${transport}$` : 'Nie wybrano' }}</td></tr>
+									</tbody>
+								</v-table>
+							</v-skeleton-loader>
 						</v-col>
 						<v-divider></v-divider>
 						<v-col cols="12">
-							<div style="text-align: right" class="px-5">Suma: {{ currentPrice }}$</div>
+							<v-skeleton-loader :loading="loading" type="text" class="d-block">
+								<div style="text-align: right; font-weight: bold" class="px-5">{{ isNaN(currentPrice) || transport == "0" || usaState == "0" ? 'Nie uzupełniono wszystkich pól' : `Suma: ${currentPrice}$` }}</div>
+							</v-skeleton-loader>
 						</v-col>
 					</v-row>
 				</v-form>
@@ -124,8 +156,12 @@
 <script>
 import jsonFile from '@/assets/exampleapi.json'
 import localizations from '@/assets/states.json'
+import { VSkeletonLoader } from 'vuetify/labs/VSkeletonLoader';
 
 export default {
+	components: {
+		VSkeletonLoader
+	},
 	data() {
 		return {
 			vin: '',
@@ -140,11 +176,13 @@ export default {
 			transport: '0',
 			states: localizations.states,
 			destinations: localizations.destinations,
-			currentPrice: 0
+			currentPrice: 0,
+			loading: false
 		}
 	},
 	methods: {
 		async GetCarData() {
+			this.loading = true
             const url = `https://api.copart-iaai-api.com/example-api.json`
 			//const url = `https://api.copart-iaai-api.com/api/v1/get-car-vin?vin_number=5UXTS3C56J0Y98331&api_token=7471ef49828d1441aeb4516ec5bf76cfb62fa52e4125d04bc71b41dcfce0f829`
             const response = await fetch(url, {
@@ -155,6 +193,7 @@ export default {
                 }
             })
             this.data = await response.json()
+			this.loading = false
         },
 		calculatePrice() {
 			let clo = this.obliczClo()
@@ -191,7 +230,15 @@ export default {
 			if (value.name == undefined) return '';
 			return `${value.name}: ${value.price}$`;
 		},
-	},
+		getFormattedDate(date) {
+			if(date == null || date == undefined || date == '') return
+			return `${this.AddZeroToNumber(date.getDate())}.${this.AddZeroToNumber(date.getUTCMonth()+1)}.${date.getFullYear()}, godzina: ${this.AddZeroToNumber(date.getHours())}:${this.AddZeroToNumber(date.getMinutes())}`
+		},
+		AddZeroToNumber(number) {
+			if(number >= 0 && number <= 9) return `0${number}`
+			return number
+			},
+		},
 	created() {
 		this.vin = this.$route.query.vin
 		this.data = jsonFile
@@ -229,5 +276,8 @@ export default {
 <style scoped>
 .calculator tr td:nth-child(2) {
 	text-align: right;
+}
+.hide {
+	opacity: 0;
 }
 </style>
